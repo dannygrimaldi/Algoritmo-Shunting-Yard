@@ -88,7 +88,7 @@
 		197763D0254C9EEA00FFAEB3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Daniel Hernández Grimaldi";
 				TargetAttributes = {
 					197763D7254C9EEA00FFAEB3 = {
@@ -239,6 +239,7 @@
 		197763E0254C9EEA00FFAEB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G8AY4XAT45;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -248,6 +249,7 @@
 		197763E1254C9EEA00FFAEB3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G8AY4XAT45;
 				PRODUCT_NAME = "$(TARGET_NAME)";
