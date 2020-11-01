@@ -76,8 +76,8 @@ cListaLigada(){
     void DelFront()
     {
         cNodo * aux = inicio;
-        inicio = inicio->sig;
-        aux->sig = NULL;
+        inicio=aux->sig;
+        aux=nullptr;
     }
 
     void front(char charAinsertar)
@@ -187,19 +187,25 @@ else if(aux->getPrec()==1){
     else {
         if (stak.inicio!=NULL) {
             if (stak.inicio->getPrec()>=aux->getPrec()) {
-                int x=0;
+                
+                
+                bool x=false;
                 if(aux->getData()!='('){
                     out.end(stak.inicio->getData());
-                    x=1;
+                    x=true;
                     //stak.DelFront();
                     }
             if(stak.inicio->sig!=NULL&&stak.inicio->sig->getPrec()==aux->getPrec()){
-                    out.end(aux->getData());
+                        
+                if(x==true){
+                    stak.DelFront();}
+                    out.end(stak.inicio->getData());
                     stak.DelFront();
+                    stak.front(aux->getData());
                     }
                 
                 else{
-                    if(x==1)
+                    if(x==true)
                     stak.DelFront();
                     stak.front(aux->getData());
                     }
