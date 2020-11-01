@@ -29,14 +29,14 @@ public:
     int precedencia(){
         int c=getData();
         switch(c){
-        case '(':       return 0; break;
-        case ')':       return 0; break;
+        case '(':       break;
+        case ')':       break;
         case '^':       return 4; break;
         case '*':       return 3; break;
         case '/':       return 3; break;
         case '+':       return 2; break;
         case '-':       return 2; break;
-            default: return 1;
+        default: return 1;
         }
         return false;
     }
@@ -72,15 +72,6 @@ public:
 cListaLigada(){
     inicio = NULL;
 }
-    
-    void insertarEnLa3Pos(char charAinsertar)
-    {
-        cNodo *aux = new cNodo('u');
-        cNodo *aux1;
-        aux1 = inicio->sig->sig->sig;
-        aux->sig = aux1;
-        inicio->sig->sig->sig = aux;
-    }
 
     void DelFront()
     {
@@ -101,7 +92,7 @@ cListaLigada(){
         }
     }
     
-    void back(char charAinsertar){
+    void end(char charAinsertar){
         if (inicio==NULL)
             inicio = new cNodo(charAinsertar);
         else
@@ -114,16 +105,8 @@ cListaLigada(){
         }
     }
     
-    void crearNodosDePrueba()
-    {
-        inicio = new cNodo('5');
-        inicio->sig = new cNodo('-');
-        inicio->sig->sig = new cNodo('6');
-        inicio->sig->sig->sig = new cNodo('d');
-        
-    }
-    
     void imprimirExit(){
+        cout<<"Notación Polaca inversa: ";
         cNodo * aux=inicio;
         while(aux!=NULL){
             aux->imp();
@@ -136,12 +119,12 @@ cListaLigada(){
     
    void leer(){
        char cadena[100];
-       cout<<"ingrese el string: ";
+       cout<<"Ingrese la operación infija: ";
        cin>>cadena;
        fflush(stdin);
         int i;
          for(i = 0; cadena[i]; i++)
-             back(cadena[i]);
+             end(cadena[i]);
       //printf("%s\n", cadena);
     }
     
@@ -169,7 +152,6 @@ class shunting{
 
 public:
     
-    
     void resolver(){
         token.leer();
         algoritmo();
@@ -187,32 +169,32 @@ public:
     if(aux->getData()==')'){
         cNodo* aux1=stak.inicio;
            while(aux1!=NULL&&aux1->getData()!='('){
-                out.back(aux1->getData());
+                out.end(aux1->getData());
             //if(stak.inicio->getData()=='(')
                 stak.DelFront();
                 aux1=aux1->sig;
                 //stak.imprimirExit();
                 //out.imprimirExit();
            }
-            // if(stak.inicio->getData()=='(')
+             if(stak.inicio->getData()=='(')
             stak.DelFront();
         }
             
             
 else if(aux->getPrec()==1){
-        out.back(aux->getData());
+        out.end(aux->getData());
         }
     else {
         if (stak.inicio!=NULL) {
             if (stak.inicio->getPrec()>=aux->getPrec()) {
                 int x=0;
                 if(aux->getData()!='('){
-                    out.back(stak.inicio->getData());
+                    out.end(stak.inicio->getData());
                     x=1;
                     //stak.DelFront();
                     }
             if(stak.inicio->sig!=NULL&&stak.inicio->sig->getPrec()==aux->getPrec()){
-                    out.back(aux->getData());
+                    out.end(aux->getData());
                     stak.DelFront();
                     }
                 
@@ -237,7 +219,7 @@ else if(aux->getPrec()==1){
         cNodo* aux1=stak.inicio;
         while(aux1!=NULL){
             if(aux1->getData()!='(')
-            out.back(aux1->getData());
+            out.end(aux1->getData());
             aux1=aux1->sig;
             }
         }
