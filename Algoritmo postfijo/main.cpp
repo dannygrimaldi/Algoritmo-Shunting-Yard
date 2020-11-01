@@ -29,8 +29,8 @@ public:
     int precedencia(){
         int c=getData();
         switch(c){
-        case '(': break;
-        case ')': break;
+        case '(':       return 0; break;
+        case ')':       return 0; break;
         case '^':       return 4; break;
         case '*':       return 3; break;
         case '/':       return 3; break;
@@ -53,7 +53,7 @@ public:
     }
     friend class cListaLigada;
     
-    int getData(){          // interfaz de clase
+    int getData(){          
     return c;
     }
     cNodo* getSig(){
@@ -82,14 +82,14 @@ cListaLigada(){
         inicio->sig->sig->sig = aux;
     }
 
-    void borrarPrimer()
+    void DelFront()
     {
         cNodo * aux = inicio;
         inicio = inicio->sig;
         aux->sig = NULL;
     }
 
-    void insAlprinc(char charAinsertar)
+    void front(char charAinsertar)
     {
         if (inicio == NULL)
             inicio = new cNodo(charAinsertar);
@@ -100,20 +100,20 @@ cListaLigada(){
             inicio = aux;
         }
     }
-    void insAlfinal(char charAinsertar)
-    {
-        if (inicio == NULL)
+    
+    void back(char charAinsertar){
+        if (inicio==NULL)
             inicio = new cNodo(charAinsertar);
         else
         {
-            cNodo *aux;
-                aux=inicio;
+            cNodo *aux=inicio;
             while(aux->sig!=NULL){
                 aux=aux->sig;
             }
             aux->sig = new cNodo(charAinsertar);
         }
     }
+    
     void crearNodosDePrueba()
     {
         inicio = new cNodo('5');
@@ -141,7 +141,7 @@ cListaLigada(){
        fflush(stdin);
         int i;
          for(i = 0; cadena[i]; i++)
-             insAlfinal(cadena[i]);
+             back(cadena[i]);
       //printf("%s\n", cadena);
     }
     
@@ -160,7 +160,7 @@ class shunting{
     
     cListaLigada token;
     cListaLigada stak;
-    cListaLigada salida;
+    cListaLigada out;
     public:
     
     shunting(){
@@ -173,41 +173,73 @@ public:
     void resolver(){
         token.leer();
         algoritmo();
-        salida.imprimirExit();
+        out.imprimirExit();
+        
     }
     
     
     void algoritmo(){
         cNodo * aux = token.inicio;
         while(aux!=NULL){
+            //stak.imprimirExit();
+            //out.imprimirExit();
             
-if(aux->getPrec()==1){
-                salida.insAlfinal(aux->getData());
-            }
-    
-            else {
-                    if (stak.inicio!=NULL) {
-                        if (stak.inicio->getPrec()>=aux->getPrec()) {
-                            salida.insAlfinal(stak.inicio->getData());
-                            stak.borrarPrimer();
-                            stak.insAlprinc(aux->getData());
-                        } else if ((stak.inicio->getPrec()<aux->getPrec())) {
-                            stak.insAlprinc(aux->getData());
-                        }
-                    } else {
-                        stak.insAlprinc(aux->getData());
+    if(aux->getData()==')'){
+        cNodo* aux1=stak.inicio;
+           while(aux1!=NULL&&aux1->getData()!='('){
+                out.back(aux1->getData());
+            //if(stak.inicio->getData()=='(')
+                stak.DelFront();
+                aux1=aux1->sig;
+                //stak.imprimirExit();
+                //out.imprimirExit();
+           }
+            // if(stak.inicio->getData()=='(')
+            stak.DelFront();
+        }
+            
+            
+else if(aux->getPrec()==1){
+        out.back(aux->getData());
+        }
+    else {
+        if (stak.inicio!=NULL) {
+            if (stak.inicio->getPrec()>=aux->getPrec()) {
+                int x=0;
+                if(aux->getData()!='('){
+                    out.back(stak.inicio->getData());
+                    x=1;
+                    //stak.DelFront();
+                    }
+            if(stak.inicio->sig!=NULL&&stak.inicio->sig->getPrec()==aux->getPrec()){
+                    out.back(aux->getData());
+                    stak.DelFront();
+                    }
+                
+                else{
+                    if(x==1)
+                    stak.DelFront();
+                    stak.front(aux->getData());
+                    }
+                
+                    }
+            else if ((stak.inicio->getPrec()<aux->getPrec())) {
+                        stak.front(aux->getData());
                     }
                 }
-            aux=aux->sig;
-            
+        else {
+                    stak.front(aux->getData());
+                }
+            }
+        aux=aux->sig;
         }
+        
         cNodo* aux1=stak.inicio;
         while(aux1!=NULL){
-            salida.insAlfinal(aux1->getData());
+            if(aux1->getData()!='(')
+            out.back(aux1->getData());
             aux1=aux1->sig;
             }
-        
-           
         }
             
 };
