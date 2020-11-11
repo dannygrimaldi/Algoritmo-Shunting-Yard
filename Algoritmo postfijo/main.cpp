@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <map>
 using namespace std;
 
 
@@ -14,7 +15,7 @@ using namespace std;
 class cNodo
 {
     char c;
-    int prec;
+    int num,prec;
 
 public:
     cNodo *sig;
@@ -25,24 +26,37 @@ public:
 
         sig=NULL;
     }
+    cNodo(int num)
+    {
+        this->num = num;
+        this->prec = precedencia();
+
+        sig=NULL;
+    }
+
 
     int precedencia(){
         int c=getData();
-        switch(c){
-        case '(':       break;
-        case ')':       break;
-        case '^':       return 4; break;
-        case '*':       return 3; break;
-        case '/':       return 3; break;
-        case '+':       return 2; break;
-        case '-':       return 2; break;
-        default: return 1;
+if(c=='('||c==')'||c=='^'||c=='*'||c=='/'||c=='+'||c=='-'){
+    if(c=='('||c==')'){return 0;}
+    if(c=='^'){return 4;}
+    if(c=='*'||c=='/'){return 3;}
+    if(c=='+'||c=='-'){return 2;}
         }
+            else{
+                return 1;
+            }
         return false;
     }
 
     void imp(){
+        if(prec==1){
+            cout<<num<<' ';
+            
+        }
+       else
         cout<<c<<' ';
+        
     }
 
     void imprimir()
@@ -105,6 +119,18 @@ cListaLigada(){
         }
     }
 
+    void endn(int Ainsertar){
+        if (inicio==NULL)
+            inicio = new cNodo(Ainsertar);
+        else
+        {
+            cNodo *aux=inicio;
+            while(aux->sig!=NULL){
+                aux=aux->sig;
+            }
+            aux->sig = new cNodo(Ainsertar);
+        }
+    }
     void imprimirExit(){
        cout<<"Notación Polaca inversa: ";
         cNodo * aux=inicio;
@@ -117,15 +143,30 @@ cListaLigada(){
 
     }
 
-   void leer(){
+   bool leer(){
        char cadena[100];
        cout<<"Ingrese la operación infija: ";
        cin>>cadena;
        fflush(stdin);
-         for(int i = 0; cadena[i]; i++)
-             end(cadena[i]);
-      //printf("%s\n", cadena);
-    }
+       int j=0;
+       for(int i = 0; cadena[i]; i++){
+           end(cadena[i]);
+           if(cadena[i]=='('){
+               j++;
+           }
+           if(cadena[i]==')'){
+               j--;
+           }
+        }
+       if(j!=0){
+           cout<<"Error de sintaxis"<<endl;
+           return false;
+       }
+       else{
+           return true;
+       }
+           
+   }
 
     void imprimirLista()
       {
@@ -152,10 +193,14 @@ class shunting{
 public:
 
     void resolver(){
-        token.leer();
-        algoritmo();
-        out.imprimirExit();
-
+        //token.leer();
+        if(token.leer()==true){
+            algoritmo();
+            out.imprimirExit();
+        }
+        else{
+            exit (0);
+        }
     }
 
 
@@ -177,11 +222,22 @@ public:
            }
             if(stak.inicio->getData()=='(')
             stak.DelFront();
+        
             }
-
-
+            
             else if(aux->getPrec()==1){
-            out.end(aux->getData());
+                int a,i=0;char cadena[i];
+                cadena[i]=aux->getData();
+                while(aux->sig!=NULL&&aux->sig->getPrec()==1){
+                      aux=aux->sig;
+                            i++;
+                    cadena[i]=aux->getData();}
+                
+                       a=atoi(cadena);
+                        out.endn(a);
+                         cadena[i]=NULL;
+                
+           // out.end(aux->getData());
             }
     else
     {
@@ -192,7 +248,7 @@ public:
                 bool x=false;
                 if(aux->getData()!='(')
                 {
-                    out.end(stak.inicio->getData());
+                    out.end(stak.inicio->getData());   ///
                     x=true;
                 }
             if(stak.inicio->sig!=NULL&&stak.inicio->sig->getPrec()==aux->getPrec())
@@ -203,7 +259,7 @@ public:
                             stak.DelFront();
                         }
                         
-                        stak.front(aux->getData());
+                        stak.front(aux->getData());   ///
                         
                         
                     }
@@ -212,7 +268,7 @@ public:
                     {
                             if(x==true){
                             stak.DelFront();}
-                            stak.front(aux->getData());
+                            stak.front(aux->getData()); ///
                     }
             }
             else
